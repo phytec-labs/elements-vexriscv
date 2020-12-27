@@ -1,8 +1,8 @@
-name: Pull VexRiscv
+name: Merge stable-next branch
 
 on:
-  schedule:
-  - cron: "0 0 * * *"
+  push:
+    branches: [ upstream ]
 
 jobs:
   build:
@@ -13,14 +13,14 @@ jobs:
         git clone -b ${{ env.branch }} git@github.com:phytec-labs/${{ env.repository_name }}.git ${{ env.repository_name }}
       env:
         repository_name: elements-vexriscv
-        branch: upstream
+        branch: stable-next
 
-    - name: rebase to upstream
+    - name: merge upstream
       run: |
         cd ${{ env.repository_name }}
         git remote add upstream git@github.com:SpinalHDL/VexRiscv.git
         git fetch upstream
-        git rebase upstream/master
+        git merge upstream/master
         cd ../
       env:
         repository_name: elements-vexriscv
@@ -32,7 +32,7 @@ jobs:
         cd ../
       env:
         repository_name: elements-vexriscv
-        branch: upstream
+        branch: stable-next
 
     - name: post cleanup
       if: always()
